@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 
 import userRouter from "./user/router/userRouter";
 import chatRouter from "./chat/router/chatRouter";
+import connectRouter from "./connection/router/connectRouter";
+import utilRouter from "./util/utilRouter";
 const app = express();
 
 // app.use(upload.array())
@@ -27,3 +29,5 @@ app.listen(PORT, () => {
 
 app.use("/user", userRouter);
 app.use("/chat", chatRouter);
+app.use("/connect", connectRouter);
+app.use("/output", utilRouter);

@@ -1,46 +1,48 @@
+import mongoose from "mongoose"
 import Chat from "../model/chatModel";
 import User from "../../user/model/userModel";
+import Connect from "../../connection/model/connectModel"
 
 exports.createNewChat = async (req, res) => {
   try {
     const chat = await new Chat({
-      sender: req.body.sender,
-      receiver: req.body.receiver,
-      message: req.body.message,
-      status: req.body.status,
+      _id: mongoose.Types.ObjectId(),
+      connect: req.body.connect,
+      person: req.body.person,
+      message: req.body.message
     });
     chat.save();
 
-    let user1 = await User.findById(req.body.sender);
+    // let user1 = await User.findById(req.body.sender);
     // let user2 = await User.findById(req.body.receiver);
 
     // oldContact1 = user1.contacts;
     // oldContact1.push(req.body.receiver);
 
-    const updation1 = await User.findByIdAndUpdate(
-      req.body.sender,
-      { contacts: req.body.receiver },
-      { new: true }
-    );
+    // const updation1 = await User.findByIdAndUpdate(
+    //   req.body.sender,
+    //   { contacts: req.body.receiver },
+    //   { new: true }
+    // );
 
     // oldContact2 = user2.contacts;
     // oldContact2.push(req.body.sender);
 
-    const updation2 = await User.findByIdAndUpdate(
-      req.body.receiver,
-      { contacts: req.body.sender },
-      { new: true }
-    );
+    // const updation2 = await User.findByIdAndUpdate(
+    //   req.body.receiver,
+    //   { contacts: req.body.sender },
+    //   { new: true }
+    // );
 
-    let chat3 = await Chat.findOne({ message: req.body.message });
-    let someArr = user1.messagesId;
-    // console.log(someArr);
-    someArr.push(chat3._id);
-    const updation3 = await User.findOneAndUpdate(
-      { _id: req.body.sender },
-      { messagesId: someArr },
-      { new: true }
-    );
+    // let chat3 = await Chat.findOne({ message: req.body.message });
+    // let someArr = user1.messagesId;
+    // // console.log(someArr);
+    // someArr.push(chat3._id);
+    // const updation3 = await User.findOneAndUpdate(
+    //   { _id: req.body.sender },
+    //   { messagesId: someArr },
+    //   { new: true }
+    // );
 
     res.status(201).json({
       chat,
@@ -122,10 +124,46 @@ exports.singleChat = async (req, res) => {
   }
 };
 
+// exports.lastChat = async (req, res) => {
+//   try {
+//       // const lastChatOfUsers =
+//   const user = await User.findOne({ name: req.body.name });
+//   // console.log(user._id);
+//   const chat = await Chat.find({
+//     $or: [
+//       { sender: user._id },
+//       { receiver: user._id }
+//     ]
+//   });
+//   let lastChatIndx = chat.length-1
+
+//   res.status(200).json({
+//     chat_history:{
+//       chat1:chat[lastChatIndx]
+//     }
+//   })
+//   // console.log(chat);
+//   } catch (error) {
+//     res.send(error.message)
+//   }
+// };
+
 exports.lastChat = async (req, res) => {
-  // const lastChatOfUsers =
-  const user = await User.findOne({ name: req.body.name });
-  // console.log(user._id);
-  const chat = await Chat.find({ sender: user._id });
-  console.log(chat);
+  try {
+
+  } catch (error) {
+    res.send(error.message)
+  }
 };
+
+exports.showChatsByConnectId = async (req, res)=>{
+  try {
+    const chats = await Chat.find({connect:req.params.connectId})
+    res.status(200).json({
+      no_of_messages_in_chat:chats.length,
+      chats:chats[chats.length-1]
+    })
+  } catch (error) {
+    res.send(error.message)
+  }
+}

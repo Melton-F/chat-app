@@ -15,4 +15,6 @@ router.post("/single-chat", chatController.singleChat);
 
 router.post("/last-chat", chatController.lastChat);
 
+router.get("/get-personal-chat/:connectId", chatController.showChatsByConnectId)
+
 module.exports = router;

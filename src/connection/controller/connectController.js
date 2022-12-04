@@ -38,14 +38,14 @@ exports.userChats = async (req, res) => {
       $or: [{ person1: req.params.userId }, { person2: req.params.userId }],
     });
 
-    let xxx = [];
+    let arr = [];
     connectionByBothPersons.forEach(async (element, index) => {
       let chatsByConnection = await Chat.find({ connect: element._id });
       let lastIndex = chatsByConnection.length - 1;
       let resultObj = chatsByConnection[lastIndex];
-      xxx.push(resultObj);
-        if(xxx.length === 2){
-            const updation = await Util.findByIdAndUpdate("638d1627956aebc8708e6f75", {output:xxx}, {new:true})
+      arr.push(resultObj);
+        if(arr.length === 2){
+            const updation = await Util.findByIdAndUpdate("638d1627956aebc8708e6f75", {output:arr}, {new:true})
         }
     });
     const someObj = await Util.findById("638d1627956aebc8708e6f75")

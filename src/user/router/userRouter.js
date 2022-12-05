@@ -6,13 +6,7 @@ const router = express.Router();
 
 router.get("/", userController.greetings);
 
-router.get(
-  "/show-users",
-  upload.single("profile_picture"),
-  userController.showAllUsers
-);
-
-router.post("/create-user", userController.createUser);
+router.post("/create-user",upload.single("profile"), userController.createUser);
 
 router.get("/get-user/:id", userController.getUserById);
 

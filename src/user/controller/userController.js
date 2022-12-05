@@ -24,10 +24,18 @@ exports.showAllUsers = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
+    console.log(req.file);
     const user = new User({
       _id: mongoose.Types.ObjectId(),
       name: req.body.name,
     });
+    // console.log(req.body.name);
+    // if(!req.file){
+    //  return console.log("no req.files");
+    // }
+    // else{
+    //   console.log(req.body);
+    // }
     user.save();
     res.status(200).json({
       createdUser: user,

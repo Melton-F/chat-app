@@ -1,13 +1,13 @@
-import mongoose from "mongoose"
-import Chat from "../model/chatModel";
+import mongoose from "mongoose";
+import Chat from "../model/chat-model";
 
-exports.createNewChat = async (req, res) => {
+export const createNewChat = async (req, res) => {
   try {
     const chat = await new Chat({
       _id: mongoose.Types.ObjectId(),
       connect: req.body.connect,
       person: req.body.person,
-      message: req.body.message
+      message: req.body.message,
     });
     chat.save();
 
@@ -19,7 +19,7 @@ exports.createNewChat = async (req, res) => {
   }
 };
 
-exports.showAllChats = async (req, res) => {
+export const showAllChats = async (req, res) => {
   try {
     const chats = await Chat.find();
     res.status(200).json({
@@ -32,7 +32,7 @@ exports.showAllChats = async (req, res) => {
   }
 };
 
-exports.updateChatById = async (req, res) => {
+export const updateChatById = async (req, res) => {
   try {
     const chat = await Chat.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -45,15 +45,14 @@ exports.updateChatById = async (req, res) => {
   }
 };
 
-
-exports.showChatsByConnectId = async (req, res)=>{
+export const showChatsByConnectId = async (req, res) => {
   try {
-    const chats = await Chat.find({connect:req.params.connectId})
+    const chats = await Chat.find({ connect: req.params.connectId });
     res.status(200).json({
-      no_of_messages_in_chat:chats.length,
-      chats:chats[chats.length-1]
-    })
+      no_of_messages_in_chat: chats.length,
+      chats: chats[chats.length - 1],
+    });
   } catch (error) {
-    res.send(error.message)
+    res.send(error.message);
   }
-}
+};

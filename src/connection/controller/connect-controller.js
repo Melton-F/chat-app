@@ -1,9 +1,8 @@
-import Connect from "../model/connectModel";
-import Chat from "../../chat/model/chatModel";
+import Connect from "../model/connect-model";
+import Chat from "../../chat/model/chat-model";
 import mongoose from "mongoose";
-import Util from "../../util/utilModel";
 
-exports.createChatConnection = async (req, res) => {
+export const createChatConnection = async (req, res) => {
   try {
     const chatConnection = await new Connect({
       _id: mongoose.Types.ObjectId(),
@@ -20,7 +19,7 @@ exports.createChatConnection = async (req, res) => {
   }
 };
 
-exports.chatConnections = async (req, res) => {
+export const chatConnections = async (req, res) => {
   try {
     const chats = await Connect.find();
     res.status(200).json({
@@ -32,26 +31,24 @@ exports.chatConnections = async (req, res) => {
   }
 };
 
-exports.userChats = async (req, res) => {
+export const userChats = async (req, res) => {
   try {
     const connectionByBothPersons = await Connect.find({
-      $or: [{ person1: req.params.userId }, { person2: req.params.userId }],
+      $or: [{ person1: req.body.userId }, { person2: req.body.userId }],
     });
 
-    let arr = [];
-    connectionByBothPersons.forEach(async (element, index) => {
+    let result = [];
+    connectionByBothPersons.forEach(async (element, index, array) => {
       let chatsByConnection = await Chat.find({ connect: element._id });
       let lastIndex = chatsByConnection.length - 1;
       let resultObj = chatsByConnection[lastIndex];
-      arr.push(resultObj);
-        if(arr.length === 2){
-            const updation = await Util.findByIdAndUpdate("638d1627956aebc8708e6f75", {output:arr}, {new:true})
-        }
-    });
-    const someObj = await Util.findById("638d1627956aebc8708e6f75")
-
-    res.status(200).json({
-      user_chats: someObj.output
+      result.push(resultObj);
+      if (index === array.length - 1) {
+        res.status(200).json({
+          no_of_friends_chats: result.length,
+          user_chats: result,
+        });
+      }
     });
   } catch (error) {
     res.send(error.message);

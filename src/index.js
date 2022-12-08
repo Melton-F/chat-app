@@ -1,20 +1,22 @@
 import express from "express";
 import mongoose from "mongoose";
+import fileUpload from "express-fileupload";
 // import upload = from ("multer")
 // import busboy from "connect-busboy"
 
-import userRouter from "./user/router/userRouter";
-import chatRouter from "./chat/router/chatRouter";
-import connectRouter from "./connection/router/connectRouter";
-import utilRouter from "./util/utilRouter";
+import userRouter from "./user/router/user-router";
+import chatRouter from "./chat/router/chat-router";
+import connectRouter from "./connection/router/connect-router";
 const app = express();
 
 // app.use(upload.array())
 // app.use(busboy())
 
+app.use(fileUpload());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/upload', express.static('upload'))
+// app.use('/upload', express.static('upload'))
 
 mongoose.connect("mongodb://localhost:27017/chat-task");
 mongoose.connection
@@ -34,4 +36,3 @@ app.listen(PORT, () => {
 app.use("/user", userRouter);
 app.use("/chat", chatRouter);
 app.use("/connect", connectRouter);
-app.use("/output", utilRouter);
